@@ -12,8 +12,13 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
+<<<<<<< HEAD
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="jdk" jdkName="JavaSE-16" jdkType="JavaSDK" />
+=======
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+>>>>>>> 2c722f14ac751f64c39aa75c9e4ecab97a67d498
     <orderEntry type="module-library" exported="">
       <library name="JGameGrid.jar">
         <CLASSES>
