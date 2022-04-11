@@ -7,6 +7,7 @@ import snakeladder.game.custom.CustomGGButton;
 import snakeladder.utility.ServicesRandom;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @SuppressWarnings("serial")
@@ -312,6 +313,7 @@ public class NavigationPane extends GameGrid
       showStatus("Done. Click the hand!");
       String result = gp.getPuppet().getPuppetName() + " - pos: " + currentIndex;
       showResult(result);
+      // if all rolls in a players turn was taken then switch to the next player
       if (nbRolls % numberOfDice == 0) {
         gp.switchToNextPuppet();
         setTotalRoll(0);
@@ -337,8 +339,19 @@ public class NavigationPane extends GameGrid
     showScore("# Rolls: " + (++nbRolls));
     setTotalRoll(totalRoll + nb);
 
+    // If roll is true then the last dice was thrown for the players turn, move player the total amount rolled
     if (roll) {
       gp.getPuppet().go(totalRoll);
+
+      // Check if land on other player, if yes then move that other player back one space
+      List<Puppet> puppets = gp.getAllPuppets();
+      for (int i = 0; i < gp.getNumberOfPlayers(); i++) {
+        for (int j = 0; j < gp.getNumberOfPlayers(); j++) {
+          if (puppets.get(i).getCellIndex() + totalRoll == puppets.get(j).getCellIndex()) {
+            puppets.get(j).moveBackACell();
+          }
+        }
+      }
 
     } else{
       if (isAuto) {
@@ -378,6 +391,7 @@ public class NavigationPane extends GameGrid
       nb = ServicesRandom.get().nextInt(6) + 1;
     }
 
+    // Determine if it is the players final roll of their turn
     if (rollIndex == numberOfDice) {
       roll = true;
     }else {

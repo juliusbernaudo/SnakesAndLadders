@@ -81,6 +81,28 @@ public class Puppet extends Actor
     cellIndex++;
   }
 
+  // Moves puppet back one cell - used for coding change task 3
+  public void moveBackACell()
+  {
+    int tens = cellIndex / 10;
+    int ones = cellIndex - tens * 10;
+    if (tens % 2 == 0)     // Cells starting left 01, 21, .. 81
+    {
+      if (ones == 0 && cellIndex > 0)
+        setLocation(new Location(getX(), getY() + 1));
+      else
+        setLocation(new Location(getX() - 1, getY()));
+    }
+    else     // Cells starting left 20, 40, .. 100
+    {
+      if (ones == 0)
+        setLocation(new Location(getX(), getY() + 1));
+      else
+        setLocation(new Location(getX() + 1, getY()));
+    }
+    cellIndex--;
+  }
+
   public void act()
   {
     if ((cellIndex / 10) % 2 == 0)
@@ -98,6 +120,7 @@ public class Puppet extends Actor
     if (currentCon != null)
     {
 
+      // skips the animation when true
       if (skip) {
         currentCon = null;
         skip = false;
@@ -144,8 +167,9 @@ public class Puppet extends Actor
         // Check if on connection start
         if ((currentCon = gamePane.getConnectionAt(getLocation())) != null)
         {
+          // if on a down path and minimum amount rolled then do not follow the path rule
           if (currentCon.cellStart > currentCon.cellEnd
-                  && (float)navigationPane.getTotalRoll() / navigationPane.getNumDice() == 1) {
+                  && navigationPane.getTotalRoll() == navigationPane.getNumDice()) {
             skip = true;
             setActEnabled(false);
             navigationPane.prepareRoll(cellIndex);
