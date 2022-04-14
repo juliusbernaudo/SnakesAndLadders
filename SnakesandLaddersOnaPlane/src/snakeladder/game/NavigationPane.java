@@ -207,7 +207,8 @@ public class NavigationPane extends GameGrid
     int currentRound = nbRolls / gp.getNumberOfPlayers();
     int currentPlayerRound = playerRound.get(playerIndex);
 
-    //int playerIndex = nbRolls % gp.getNumberOfPlayers();
+    // increment amount of rolls taken by each player
+    // return the die value indexed at the players roll number
     if (dieValues.get(playerIndex).size() > currentRound) {
       playerRound.set(playerIndex, (currentPlayerRound + 1));
       return dieValues.get(playerIndex).get(currentPlayerRound);
@@ -348,7 +349,11 @@ public class NavigationPane extends GameGrid
       for (int i = 0; i < gp.getNumberOfPlayers(); i++) {
         for (int j = 0; j < gp.getNumberOfPlayers(); j++) {
           if (puppets.get(i).getCellIndex() + totalRoll == puppets.get(j).getCellIndex()) {
+            // puppet that is landed on moves back one space
             puppets.get(j).moveBackACell();
+            //puppets.get(j).go(1);
+            
+
           }
         }
       }

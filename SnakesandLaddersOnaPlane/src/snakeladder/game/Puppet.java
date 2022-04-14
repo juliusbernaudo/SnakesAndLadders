@@ -15,6 +15,7 @@ public class Puppet extends Actor
   private boolean isAuto;
   private String puppetName;
   private boolean skip = false;
+  private boolean followRule = false;
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
   {
@@ -67,16 +68,16 @@ public class Puppet extends Actor
     if (tens % 2 == 0)     // Cells starting left 01, 21, .. 81
     {
       if (ones == 0 && cellIndex > 0)
-        setLocation(new Location(getX(), getY() - 1));
+        setLocation(new Location(getX(), getY() - 1)); // move up one
       else
-        setLocation(new Location(getX() + 1, getY()));
+        setLocation(new Location(getX() + 1, getY())); // move right one
     }
     else     // Cells starting left 20, 40, .. 100
     {
       if (ones == 0)
-        setLocation(new Location(getX(), getY() - 1));
+        setLocation(new Location(getX(), getY() - 1)); // move up one
       else
-        setLocation(new Location(getX() - 1, getY()));
+        setLocation(new Location(getX() - 1, getY())); // move left one
     }
     cellIndex++;
   }
@@ -86,19 +87,21 @@ public class Puppet extends Actor
   {
     int tens = cellIndex / 10;
     int ones = cellIndex - tens * 10;
+    System.out.println(cellIndex);
+
     if (tens % 2 == 0)     // Cells starting left 01, 21, .. 81
     {
-      if (ones == 0 && cellIndex > 0)
-        setLocation(new Location(getX(), getY() + 1));
+      if (ones == 1 && cellIndex > 0) // ones == 1 means cellIndex ends with a 1 eg. 21, 41
+        setLocation(new Location(getX(), getY() + 1)); // move down one
       else
-        setLocation(new Location(getX() - 1, getY()));
+        setLocation(new Location(getX() - 1, getY())); // move left one
     }
     else     // Cells starting left 20, 40, .. 100
     {
-      if (ones == 0)
-        setLocation(new Location(getX(), getY() + 1));
+      if (ones == 1)
+        setLocation(new Location(getX(), getY() + 1)); // move down one
       else
-        setLocation(new Location(getX() + 1, getY()));
+        setLocation(new Location(getX() + 1, getY())); // move right one
     }
     cellIndex--;
   }
