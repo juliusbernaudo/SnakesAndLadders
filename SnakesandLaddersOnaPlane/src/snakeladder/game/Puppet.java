@@ -16,6 +16,7 @@ public class Puppet extends Actor
   private String puppetName;
   private boolean skip = false;
   private boolean followRule = false;
+  private boolean movingBack = false;
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
   {
@@ -93,6 +94,8 @@ public class Puppet extends Actor
     {
       if (ones == 1 && cellIndex > 0) // ones == 1 means cellIndex ends with a 1 eg. 21, 41
         setLocation(new Location(getX(), getY() + 1)); // move down one
+      else if (ones == 0) // if on 20, 40, ... 80
+        setLocation(new Location(getX() + 1, getY())); // move right one
       else
         setLocation(new Location(getX() - 1, getY())); // move left one
     }
@@ -100,10 +103,42 @@ public class Puppet extends Actor
     {
       if (ones == 1)
         setLocation(new Location(getX(), getY() + 1)); // move down one
+      else if (ones == 0) // on 10, 30, ... 90
+        setLocation(new Location(getX() - 1, getY())); // move left one
       else
         setLocation(new Location(getX() + 1, getY())); // move right one
     }
     cellIndex--;
+
+    // after moving back a space check & handle if a player is on a connection
+    setActEnabled(true);
+    if ((currentCon = gamePane.getConnectionAt(getLocation())) != null)
+    {
+      connectionMovement();
+    }
+    else
+    {
+      setActEnabled(false);
+    }
+    movingBack = true;
+  }
+  
+  // movement for snake and ladder connections
+  private void connectionMovement() {
+    gamePane.setSimulationPeriod(50);
+    y = gamePane.toPoint(currentCon.locStart).y;
+
+    if (currentCon.locEnd.y > currentCon.locStart.y)
+      dy = gamePane.animationStep;
+    else
+      dy = -gamePane.animationStep;
+    if (currentCon instanceof Snake) {
+      navigationPane.showStatus("Digesting...");
+      navigationPane.playSound(GGSound.MMM);
+    } else {
+      navigationPane.showStatus("Climbing...");
+      navigationPane.playSound(GGSound.BOING);
+    }
   }
 
   public void act()
@@ -145,10 +180,13 @@ public class Puppet extends Actor
 
           setLocationOffset(new Point(0, 0));
           currentCon = null;
-          navigationPane.prepareRoll(cellIndex);
+          // prepares roll if not relating to moving back one space
+          if (!movingBack) {
+            navigationPane.prepareRoll(cellIndex);
+          }
+          movingBack = false;
         }
       }
-
       return;
     }
 
@@ -178,20 +216,7 @@ public class Puppet extends Actor
             navigationPane.prepareRoll(cellIndex);
           }
           else {
-            gamePane.setSimulationPeriod(50);
-            y = gamePane.toPoint(currentCon.locStart).y;
-
-            if (currentCon.locEnd.y > currentCon.locStart.y)
-              dy = gamePane.animationStep;
-            else
-              dy = -gamePane.animationStep;
-            if (currentCon instanceof Snake) {
-              navigationPane.showStatus("Digesting...");
-              navigationPane.playSound(GGSound.MMM);
-            } else {
-              navigationPane.showStatus("Climbing...");
-              navigationPane.playSound(GGSound.BOING);
-            }
+            connectionMovement();
           }
         }
         else
