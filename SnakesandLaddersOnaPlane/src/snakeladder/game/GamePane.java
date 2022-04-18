@@ -130,4 +130,13 @@ public class GamePane extends GameGrid
     return (int)(a * y + b);
   }
 
+  void reverseSnakesLadders() {
+    Location locTemp;
+    for (Connection con : connections) {
+      locTemp = con.locStart;
+      con.locStart = con.locEnd;
+      con.locEnd = locTemp;
+    }
+  }
+
 }

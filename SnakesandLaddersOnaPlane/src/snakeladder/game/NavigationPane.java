@@ -237,6 +237,9 @@ public class NavigationPane extends GameGrid
     toggleCheck.addCheckButtonListener(new GGCheckButtonListener() {
       @Override
       public void buttonChecked(GGCheckButton ggCheckButton, boolean checked) {
+        if (isToggle != checked) {
+          gp.reverseSnakesLadders();
+        }
         isToggle = checked;
       }
     });
