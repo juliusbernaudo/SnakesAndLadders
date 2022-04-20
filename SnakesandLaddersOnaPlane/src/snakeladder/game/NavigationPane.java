@@ -239,7 +239,7 @@ public class NavigationPane extends GameGrid
       @Override
       public void buttonChecked(GGCheckButton ggCheckButton, boolean checked) {
         if (isToggle != checked) {
-          //gp.reverseSnakesLadders();
+          gp.reverseSnakesLadders();
         }
         isToggle = checked;
       }
@@ -454,6 +454,7 @@ public class NavigationPane extends GameGrid
       gp.reverseSnakesLadders();
       isToggle = !isToggle;
     }
+    toggleCheck.setChecked(isToggle);
     System.out.println("Set Toggle: "+isToggle);
     System.out.println("########### ORIGINAL SLOP: "+!isToggle);
   }
