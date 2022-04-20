@@ -36,7 +36,7 @@ public class BasicStrategy extends Strategy{
         int snakeCount = 0, ladderCount = 0;
 
         for (Connection con : connections) {
-            for (int i=min; i<max; i++){
+            for (int i=min; i<max+1; i++){
                 cellIndex = i+puppet.getCellIndex();
                 locTemp = gp.cellToLocation(cellIndex);
                 if(con.locStart.equals(locTemp) || con.locEnd.equals(locTemp)){

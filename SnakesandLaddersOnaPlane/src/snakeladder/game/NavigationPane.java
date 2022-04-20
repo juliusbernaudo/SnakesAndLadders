@@ -331,6 +331,8 @@ public class NavigationPane extends GameGrid
         setTotalRoll(0);
         rollIndex = 1;
         playerIndex = Integer.parseInt(gp.getPuppet().getPuppetName().replaceAll("[^0-9]", "")) - 1;
+        //run the strategy after a player has finished their turn
+        runStrategy();
       }
 
       // System.out.println("current puppet - auto: " + gp.getPuppet().getPuppetName() + "  " + gp.getPuppet().isAuto() );
@@ -415,7 +417,7 @@ public class NavigationPane extends GameGrid
       roll = false;
     }
 
-    runStrategy();
+    
 
     showStatus("Rolling...");
     showPips("");
