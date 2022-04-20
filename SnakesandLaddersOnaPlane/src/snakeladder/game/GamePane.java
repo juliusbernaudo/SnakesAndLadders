@@ -130,7 +130,7 @@ public class GamePane extends GameGrid
     return (int)(a * y + b);
   }
 
-  void reverseSnakesLadders() {
+  public void reverseSnakesLadders() {
     Location locTemp;
     for (Connection con : connections) {
       locTemp = con.locStart;
@@ -139,4 +139,7 @@ public class GamePane extends GameGrid
     }
   }
 
+  public ArrayList<Connection> getConnections() {
+    return connections;
+  }
 }

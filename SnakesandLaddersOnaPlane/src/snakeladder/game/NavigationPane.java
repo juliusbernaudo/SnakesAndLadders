@@ -234,11 +234,12 @@ public class NavigationPane extends GameGrid
     });
 
     addActor(toggleCheck, toggleModeLocation);
+
     toggleCheck.addCheckButtonListener(new GGCheckButtonListener() {
       @Override
       public void buttonChecked(GGCheckButton ggCheckButton, boolean checked) {
         if (isToggle != checked) {
-          gp.reverseSnakesLadders();
+          //gp.reverseSnakesLadders();
         }
         isToggle = checked;
       }
@@ -414,6 +415,8 @@ public class NavigationPane extends GameGrid
       roll = false;
     }
 
+    runStrategy();
+
     showStatus("Rolling...");
     showPips("");
 
@@ -434,5 +437,18 @@ public class NavigationPane extends GameGrid
 
   public void checkAuto() {
     if (isAuto) Monitor.wakeUp();
+  }
+
+  public void runStrategy(){
+    System.out.println("########### Strategy running");
+    ArrayList<Connection> connections = gp.getConnections();
+    Strategy basicStrategy = new BasicStrategy(numberOfDice, connections, gp);
+    Boolean result = basicStrategy.getResult();
+
+    if(result != isToggle){
+      gp.reverseSnakesLadders();
+      isToggle =result;
+    }
+    System.out.println("########### Set Toggle: "+result);
   }
 }
