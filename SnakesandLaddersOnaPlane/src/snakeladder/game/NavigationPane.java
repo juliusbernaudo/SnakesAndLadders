@@ -332,7 +332,9 @@ public class NavigationPane extends GameGrid
         rollIndex = 1;
         playerIndex = Integer.parseInt(gp.getPuppet().getPuppetName().replaceAll("[^0-9]", "")) - 1;
         //run the strategy after a player has finished their turn
-        runStrategy();
+        if(isAuto){
+          runStrategy();
+        }
       }
 
       // System.out.println("current puppet - auto: " + gp.getPuppet().getPuppetName() + "  " + gp.getPuppet().isAuto() );
@@ -447,9 +449,10 @@ public class NavigationPane extends GameGrid
     Strategy basicStrategy = new BasicStrategy(numberOfDice, connections, gp);
     Boolean result = basicStrategy.getResult();
 
-    if(result != isToggle){
+    if(result){
+      System.out.println("Toggle changed");
       gp.reverseSnakesLadders();
-      isToggle =result;
+      isToggle = !isToggle;
     }
     System.out.println("########### Set Toggle: "+result);
   }

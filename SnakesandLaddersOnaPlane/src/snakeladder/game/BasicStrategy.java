@@ -30,32 +30,51 @@ public class BasicStrategy extends Strategy{
     public Boolean getResult(){
         int min = dice_number;
         int max = DICE_SIZE*dice_number;
-        int snakeEvents=0, ladderEvents=0;
-        Location locTemp = null;
+        int currentUp=0, currentDown=0;
+        double currentProb = 0;
+        int alternativeUp = 0, alternativeDown = 0;
+        double alternativeProb = 0;
+        int ways = 0;
         int cellIndex = 0;
-        int snakeCount = 0, ladderCount = 0;
 
         for (Connection con : connections) {
             for (int i=min; i<max+1; i++){
                 cellIndex = i+puppet.getCellIndex();
-                locTemp = gp.cellToLocation(cellIndex);
-                if(con.locStart.equals(locTemp) || con.locEnd.equals(locTemp)){
-                    if(con instanceof Snake){
-                        snakeCount++;
-                        snakeEvents += findEventCount(0, i);
+                if(con.cellStart == cellIndex) {
+                    // current possible ways
+                    ways = findEventCount(0, i);
+                    if(con.cellStart <= con.cellEnd){
+                        // Going up
+                        currentUp += ways;
                     } else {
-                        ladderCount++;
-                        ladderEvents += findEventCount(0, i);
+                        // Going down
+                        currentDown += ways;
+                    }
+                }
+                if(con.cellEnd == cellIndex) {
+                    // possible ways when toggle switched
+                    ways = findEventCount(0, i);
+                    if(con.cellEnd <= con.cellStart){
+                        // Going up
+                        alternativeUp += ways;
+                    } else {
+                        // Going down
+                        alternativeDown += ways;
                     }
                 }
             }
         }
+        currentProb = Double.valueOf(currentUp) / (currentUp+currentDown+1);
+        alternativeProb = Double.valueOf(alternativeUp) / (alternativeUp+alternativeDown+1);
+
         System.out.println("cell index: " + puppet.getCellIndex());
-        System.out.println("ladder events("+ladderCount+"): " + ladderEvents);
-        System.out.println("snake events("+snakeCount+"): " + snakeEvents);
-        if(ladderEvents < snakeEvents){
-            return false;
+        System.out.println("(current events) up: "+currentUp+
+                ", down: " + currentDown);
+        System.out.println("(alternative events) up: "+alternativeUp+
+                ", down: " + alternativeDown);
+        if(currentProb > alternativeProb){
+            return true;
         }
-        return true;
+        return false;
     }
 }

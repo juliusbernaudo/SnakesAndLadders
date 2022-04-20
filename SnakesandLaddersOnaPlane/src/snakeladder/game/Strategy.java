@@ -21,5 +21,5 @@ public abstract class Strategy {
         this.puppet = gp.getPuppet();
     }
 
-    public Boolean getResult(){return Boolean.TRUE;}
+    public Boolean getResult(){return false;}
 }
