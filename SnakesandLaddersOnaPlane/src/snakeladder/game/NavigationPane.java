@@ -454,6 +454,7 @@ public class NavigationPane extends GameGrid
       gp.reverseSnakesLadders();
       isToggle = !isToggle;
     }
-    System.out.println("########### Set Toggle: "+result);
+    System.out.println("Set Toggle: "+isToggle);
+    System.out.println("########### ORIGINAL SLOP: "+!isToggle);
   }
 }
