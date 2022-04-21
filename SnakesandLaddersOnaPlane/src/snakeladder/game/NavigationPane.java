@@ -207,7 +207,8 @@ public class NavigationPane extends GameGrid
     int currentRound = nbRolls / gp.getNumberOfPlayers();
     int currentPlayerRound = playerRound.get(playerIndex);
 
-    //int playerIndex = nbRolls % gp.getNumberOfPlayers();
+    // increment amount of rolls taken by each player
+    // return the die value indexed at the players roll number
     if (dieValues.get(playerIndex).size() > currentRound) {
       playerRound.set(playerIndex, (currentPlayerRound + 1));
       return dieValues.get(playerIndex).get(currentPlayerRound);
@@ -309,10 +310,17 @@ public class NavigationPane extends GameGrid
     }
     else
     {
+      java.util.List  <String> playerPositions = new ArrayList<>();
+      for (Puppet puppet: gp.getAllPuppets()) {
+        playerPositions.add(puppet.getCellIndex() + "");
+      }
+
       playSound(GGSound.CLICK);
       showStatus("Done. Click the hand!");
+
       String result = gp.getPuppet().getPuppetName() + " - pos: " + currentIndex;
       showResult(result);
+
       // if all rolls in a players turn was taken then switch to the next player
       if (nbRolls % numberOfDice == 0) {
         gp.switchToNextPuppet();
@@ -320,6 +328,7 @@ public class NavigationPane extends GameGrid
         rollIndex = 1;
         playerIndex = Integer.parseInt(gp.getPuppet().getPuppetName().replaceAll("[^0-9]", "")) - 1;
       }
+
       // System.out.println("current puppet - auto: " + gp.getPuppet().getPuppetName() + "  " + gp.getPuppet().isAuto() );
 
       if (isAuto) {
@@ -334,7 +343,11 @@ public class NavigationPane extends GameGrid
 
   void startMoving(int nb)
   {
-    showStatus("Moving...");
+    // only print moving when last dice in a players turn was thrown
+    if (roll) {
+      showStatus("Moving...");
+    }
+
     showPips("Pips: " + (totalRoll + nb));
     showScore("# Rolls: " + (++nbRolls));
     setTotalRoll(totalRoll + nb);
@@ -346,10 +359,10 @@ public class NavigationPane extends GameGrid
       // Check if land on other player, if yes then move that other player back one space
       List<Puppet> puppets = gp.getAllPuppets();
       for (int i = 0; i < gp.getNumberOfPlayers(); i++) {
-        for (int j = 0; j < gp.getNumberOfPlayers(); j++) {
-          if (puppets.get(i).getCellIndex() + totalRoll == puppets.get(j).getCellIndex()) {
-            puppets.get(j).moveBackACell();
-          }
+        if (gp.getPuppet().getCellIndex() + totalRoll == puppets.get(i).getCellIndex()
+                && gp.getPuppet() != puppets.get(i)) {
+          // puppet that is landed on moves back one space
+          puppets.get(i).moveBackACell();
         }
       }
 
