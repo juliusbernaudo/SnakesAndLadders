@@ -234,9 +234,13 @@ public class NavigationPane extends GameGrid
     });
 
     addActor(toggleCheck, toggleModeLocation);
+
     toggleCheck.addCheckButtonListener(new GGCheckButtonListener() {
       @Override
       public void buttonChecked(GGCheckButton ggCheckButton, boolean checked) {
+        if (isToggle != checked) {
+          gp.reverseSnakesLadders();
+        }
         isToggle = checked;
       }
     });
@@ -327,6 +331,10 @@ public class NavigationPane extends GameGrid
         setTotalRoll(0);
         rollIndex = 1;
         playerIndex = Integer.parseInt(gp.getPuppet().getPuppetName().replaceAll("[^0-9]", "")) - 1;
+        //run the strategy after a player has finished their turn
+        if(isAuto){
+          runStrategy();
+        }
       }
 
       // System.out.println("current puppet - auto: " + gp.getPuppet().getPuppetName() + "  " + gp.getPuppet().isAuto() );
@@ -411,6 +419,8 @@ public class NavigationPane extends GameGrid
       roll = false;
     }
 
+    
+
     showStatus("Rolling...");
     showPips("");
 
@@ -431,5 +441,21 @@ public class NavigationPane extends GameGrid
 
   public void checkAuto() {
     if (isAuto) Monitor.wakeUp();
+  }
+
+  public void runStrategy(){
+    System.out.println("########### Strategy running");
+    ArrayList<Connection> connections = gp.getConnections();
+    Strategy basicStrategy = new BasicStrategy(numberOfDice, connections, gp);
+    Boolean result = basicStrategy.getResult();
+
+    if(result){
+      System.out.println("Toggle changed");
+      gp.reverseSnakesLadders();
+      isToggle = !isToggle;
+    }
+    toggleCheck.setChecked(isToggle);
+    System.out.println("Set Toggle: "+isToggle);
+    System.out.println("########### ORIGINAL SLOP: "+!isToggle);
   }
 }

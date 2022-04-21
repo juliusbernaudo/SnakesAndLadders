@@ -128,10 +128,11 @@ public class Puppet extends Actor
     gamePane.setSimulationPeriod(50);
     y = gamePane.toPoint(currentCon.locStart).y;
 
-    if (currentCon.locEnd.y > currentCon.locStart.y)
-      dy = gamePane.animationStep;
-    else
-      dy = -gamePane.animationStep;
+//    if (currentCon.locEnd.y > currentCon.locStart.y)
+//      dy = gamePane.animationStep;
+//    else
+    dy = -gamePane.animationStep;
+
     if (currentCon instanceof Snake) {
       navigationPane.showStatus("Digesting...");
       navigationPane.playSound(GGSound.MMM);
