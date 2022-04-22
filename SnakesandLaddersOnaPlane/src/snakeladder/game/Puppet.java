@@ -2,6 +2,7 @@ package snakeladder.game;
 
 import ch.aplu.jgamegrid.*;
 import java.awt.Point;
+import java.util.*;
 
 public class Puppet extends Actor
 {
@@ -16,7 +17,10 @@ public class Puppet extends Actor
   private String puppetName;
   private boolean skip = false;
   private boolean followRule = false;
+  // Do we still need this? ^^ Or was this in the basecode?
   private boolean movingBack = false;
+  private HashMap<Integer, Integer> rolls =  new HashMap<>();
+  private HashMap<String, Integer> paths =  new HashMap<>();
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
   {
@@ -61,6 +65,8 @@ public class Puppet extends Actor
   int getCellIndex() {
     return cellIndex;
   }
+
+  HashMap<Integer, Integer> getRolls() { return rolls; }
 
   private void moveToNextCell()
   {
@@ -131,14 +137,25 @@ public class Puppet extends Actor
 //    if (currentCon.locEnd.y > currentCon.locStart.y)
 //      dy = gamePane.animationStep;
 //    else
+    // Do we need this still? ^^
     dy = -gamePane.animationStep;
 
     if (currentCon instanceof Snake) {
       navigationPane.showStatus("Digesting...");
       navigationPane.playSound(GGSound.MMM);
+      if (Objects.nonNull(paths.get("down"))) {
+        paths.put("down", paths.get("down") + 1);
+      } else {
+        paths.put("down", 1);
+      }
     } else {
       navigationPane.showStatus("Climbing...");
       navigationPane.playSound(GGSound.BOING);
+      if (Objects.nonNull(paths.get("up"))) {
+        paths.put("up", paths.get("up") + 1);
+      } else {
+        paths.put("up", 1);
+      }
     }
   }
 
@@ -229,4 +246,27 @@ public class Puppet extends Actor
     }
   }
 
+  public String formatRollsOutput() {
+    String output = new String();
+    for (int i = 0; i < rolls.size(); i++) {
+      if (i != 0) {
+        output.concat(", ");
+      }
+      output.concat(i + "-" + rolls.get(i));
+    }
+    return output;
+  }
+
+  public String formatPathsOutput() {
+    String output = new String();
+    Set<String> keys = paths.keySet();
+    List<String> keysList = new ArrayList<>(keys);
+    for (int i = 0; i < paths.size(); i++) {
+      if (i != 0) {
+        output.concat(", ");
+      }
+      output.concat(keysList.get(i) + "-" + paths.get(keysList.get(i)));
+    }
+    return output;
+  }
 }
