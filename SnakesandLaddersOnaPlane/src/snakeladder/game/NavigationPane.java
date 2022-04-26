@@ -140,7 +140,7 @@ public class NavigationPane extends GameGrid
     System.out.println("dieValues = " + dieValues);
   }
 
-  void setTotalRoll(int total) {
+  private void setTotalRoll(int total) {
     this.totalRoll = total;
   }
 
@@ -310,8 +310,8 @@ public class NavigationPane extends GameGrid
       for (Puppet puppet: gp.getAllPuppets()) {
         String rollsOutput = puppet.formatRollsOutput();
         String pathsOutput = puppet.formatPathsOutput();
-        System.out.println("Player " + puppet.getCellIndex() + "rolled: " + rollsOutput);
-        System.out.println("Player " + puppet.getCellIndex() + "traversed: " + pathsOutput);
+        System.out.println(puppet.getPuppetName() + " rolled: " + rollsOutput);
+        System.out.println(puppet.getPuppetName() + " traversed: " + pathsOutput);
         playerPositions.add(puppet.getCellIndex() + "");
       }
       gamePlayCallback.finishGameWithResults(nbRolls % gp.getNumberOfPlayers(), playerPositions);
@@ -438,7 +438,7 @@ public class NavigationPane extends GameGrid
     showPips("");
 
     removeActors(Die.class);
-    Die die = new Die(nb, this, roll);
+    Die die = new Die(nb, this);
     addActor(die, dieBoardLocation);
     rollIndex++;
 

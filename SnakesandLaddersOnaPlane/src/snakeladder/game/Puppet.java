@@ -16,8 +16,6 @@ public class Puppet extends Actor
   private boolean isAuto;
   private String puppetName;
   private boolean skip = false;
-  private boolean followRule = false;
-  // Do we still need this? ^^ Or was this in the basecode?
   private boolean movingBack = false;
   private HashMap<Integer, Integer> rolls =  new HashMap<>();
   private HashMap<String, Integer> paths =  new HashMap<>();
