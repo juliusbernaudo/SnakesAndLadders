@@ -308,6 +308,8 @@ public class NavigationPane extends GameGrid
 
       java.util.List  <String> playerPositions = new ArrayList<>();
       for (Puppet puppet: gp.getAllPuppets()) {
+
+        // Formatting the recorded statistics of each puppet
         String rollsOutput = puppet.formatRollsOutput();
         String pathsOutput = puppet.formatPathsOutput();
         System.out.println(puppet.getPuppetName() + " rolled: " + rollsOutput);
