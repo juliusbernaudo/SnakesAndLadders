@@ -2,6 +2,7 @@ package snakeladder.game;
 
 import ch.aplu.jgamegrid.*;
 import java.awt.Point;
+import java.util.*;
 
 public class Puppet extends Actor
 {
@@ -15,8 +16,9 @@ public class Puppet extends Actor
   private boolean isAuto;
   private String puppetName;
   private boolean skip = false;
-  private boolean followRule = false;
   private boolean movingBack = false;
+  private HashMap<Integer, Integer> rolls =  new HashMap<>();
+  private HashMap<String, Integer> paths =  new HashMap<>();
 
   Puppet(GamePane gp, NavigationPane np, String puppetImage)
   {
@@ -61,6 +63,8 @@ public class Puppet extends Actor
   int getCellIndex() {
     return cellIndex;
   }
+
+  HashMap<Integer, Integer> getRolls() { return rolls; }
 
   private void moveToNextCell()
   {
@@ -128,17 +132,26 @@ public class Puppet extends Actor
     gamePane.setSimulationPeriod(50);
     y = gamePane.toPoint(currentCon.locStart).y;
 
-//    if (currentCon.locEnd.y > currentCon.locStart.y)
-//      dy = gamePane.animationStep;
-//    else
     dy = -gamePane.animationStep;
 
     if (currentCon instanceof Snake) {
       navigationPane.showStatus("Digesting...");
       navigationPane.playSound(GGSound.MMM);
+
+      // Adding in the pathing variables
+      if (Objects.nonNull(paths.get("down"))) {
+        paths.put("down", paths.get("down") + 1);
+      } else {
+        paths.put("down", 1);
+      }
     } else {
       navigationPane.showStatus("Climbing...");
       navigationPane.playSound(GGSound.BOING);
+      if (Objects.nonNull(paths.get("up"))) {
+        paths.put("up", paths.get("up") + 1);
+      } else {
+        paths.put("up", 1);
+      }
     }
   }
 
@@ -229,4 +242,32 @@ public class Puppet extends Actor
     }
   }
 
+  // Formatting the output into a singular string
+  public String formatRollsOutput() {
+    String output = new String();
+    Set<Integer> keys = rolls.keySet();
+    Integer[] rollsKeys = keys.toArray(new Integer[0]);
+
+    for (int i = 0; i < rollsKeys.length; i++) {
+      output = output.concat(rollsKeys[i].toString() + "-" + rolls.get(rollsKeys[i]).toString());
+      if (i+1 != rollsKeys.length) {
+        output = output.concat(", ");
+      }
+    }
+    return output;
+  }
+
+  public String formatPathsOutput() {
+    String output = new String();
+    Set<String> keys = paths.keySet();
+    String[] pathsKeys = keys.toArray(new String[0]);
+
+    for (int i = 0; i < pathsKeys.length; i++) {
+      output = output.concat(pathsKeys[i] + "-" + paths.get(pathsKeys[i]).toString());
+      if (i+1 != pathsKeys.length) {
+        output = output.concat(", ");
+      }
+    }
+    return output;
+  }
 }

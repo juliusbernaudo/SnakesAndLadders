@@ -1,16 +1,14 @@
 package snakeladder.game;
 
-import ch.aplu.jgamegrid.Location;
-
 import java.util.List;
 
 public class BasicStrategy extends Strategy{
-    public BasicStrategy(int dice_number, List<Connection> connections, GamePane gp){
-        super(dice_number, connections, gp);
+    public BasicStrategy(int diceNumber, List<Connection> connections, GamePane gp){
+        super(diceNumber, connections, gp);
     }
 
     private int findEventCount(int count, int sum){
-        if(count == dice_number){
+        if(count == diceNumber){
             if(sum == 0){
                 return 1;
             }
@@ -20,7 +18,7 @@ public class BasicStrategy extends Strategy{
         }
 
         int eventCount = 0;
-        for(int i=1; i<=DICE_SIZE; i++){
+        for(int i = 1; i<= diceSize; i++){
             eventCount += findEventCount(count+1, sum-i);
         }
 
@@ -28,8 +26,8 @@ public class BasicStrategy extends Strategy{
     }
 
     public Boolean getResult(){
-        int min = dice_number;
-        int max = DICE_SIZE*dice_number;
+        int min = diceNumber;
+        int max = diceSize * diceNumber;
         int currentUp=0, currentDown=0;
         double currentProb = 0;
         int alternativeUp = 0, alternativeDown = 0;

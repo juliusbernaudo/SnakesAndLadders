@@ -8,6 +8,7 @@ import snakeladder.utility.ServicesRandom;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 @SuppressWarnings("serial")
@@ -139,7 +140,7 @@ public class NavigationPane extends GameGrid
     System.out.println("dieValues = " + dieValues);
   }
 
-  void setTotalRoll(int total) {
+  private void setTotalRoll(int total) {
     this.totalRoll = total;
   }
 
@@ -307,6 +308,12 @@ public class NavigationPane extends GameGrid
 
       java.util.List  <String> playerPositions = new ArrayList<>();
       for (Puppet puppet: gp.getAllPuppets()) {
+
+        // Formatting the recorded statistics of each puppet
+        String rollsOutput = puppet.formatRollsOutput();
+        String pathsOutput = puppet.formatPathsOutput();
+        System.out.println(puppet.getPuppetName() + " rolled: " + rollsOutput);
+        System.out.println(puppet.getPuppetName() + " traversed: " + pathsOutput);
         playerPositions.add(puppet.getCellIndex() + "");
       }
       gamePlayCallback.finishGameWithResults(nbRolls % gp.getNumberOfPlayers(), playerPositions);
@@ -362,6 +369,14 @@ public class NavigationPane extends GameGrid
 
     // If roll is true then the last dice was thrown for the players turn, move player the total amount rolled
     if (roll) {
+
+      // Recording the total value of the roll
+      if (Objects.nonNull(gp.getPuppet().getRolls().get(totalRoll))) {
+        gp.getPuppet().getRolls().put(totalRoll, gp.getPuppet().getRolls().get(totalRoll) + 1);
+      } else {
+        gp.getPuppet().getRolls().put(totalRoll, 1);
+      }
+
       gp.getPuppet().go(totalRoll);
 
       // Check if land on other player, if yes then move that other player back one space
@@ -415,7 +430,7 @@ public class NavigationPane extends GameGrid
     // Determine if it is the players final roll of their turn
     if (rollIndex == numberOfDice) {
       roll = true;
-    }else {
+    } else {
       roll = false;
     }
 
@@ -425,7 +440,7 @@ public class NavigationPane extends GameGrid
     showPips("");
 
     removeActors(Die.class);
-    Die die = new Die(nb, this, roll);
+    Die die = new Die(nb, this);
     addActor(die, dieBoardLocation);
     rollIndex++;
 

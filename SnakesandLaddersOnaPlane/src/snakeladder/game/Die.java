@@ -8,7 +8,7 @@ public class Die extends Actor
   private int nb;
 
 
-  Die(int nb, NavigationPane np, boolean roll)
+  Die(int nb, NavigationPane np)
   {
     super("sprites/pips" + nb + ".gif", 7);
     this.nb = nb;
