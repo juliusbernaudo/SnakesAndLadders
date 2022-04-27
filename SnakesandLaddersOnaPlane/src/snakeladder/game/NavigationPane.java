@@ -310,8 +310,8 @@ public class NavigationPane extends GameGrid
       for (Puppet puppet: gp.getAllPuppets()) {
 
         // Formatting the recorded statistics of each puppet
-        String rollsOutput = puppet.formatRollsOutput();
-        String pathsOutput = puppet.formatPathsOutput();
+        String rollsOutput = puppet.puppetStatistics.formatRollsOutput();
+        String pathsOutput = puppet.puppetStatistics.formatPathsOutput();
         System.out.println(puppet.getPuppetName() + " rolled: " + rollsOutput);
         System.out.println(puppet.getPuppetName() + " traversed: " + pathsOutput);
         playerPositions.add(puppet.getCellIndex() + "");
@@ -371,10 +371,10 @@ public class NavigationPane extends GameGrid
     if (roll) {
 
       // Recording the total value of the roll
-      if (Objects.nonNull(gp.getPuppet().getRolls().get(totalRoll))) {
-        gp.getPuppet().getRolls().put(totalRoll, gp.getPuppet().getRolls().get(totalRoll) + 1);
+      if (Objects.nonNull(gp.getPuppet().puppetStatistics.getRolls().get(totalRoll))) {
+        gp.getPuppet().puppetStatistics.getRolls().put(totalRoll, gp.getPuppet().puppetStatistics.getRolls().get(totalRoll) + 1);
       } else {
-        gp.getPuppet().getRolls().put(totalRoll, 1);
+        gp.getPuppet().puppetStatistics.getRolls().put(totalRoll, 1);
       }
 
       gp.getPuppet().go(totalRoll);
