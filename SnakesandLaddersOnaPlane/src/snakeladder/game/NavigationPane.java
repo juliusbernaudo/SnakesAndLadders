@@ -371,10 +371,10 @@ public class NavigationPane extends GameGrid
     if (roll) {
 
       // Recording the total value of the roll
-      if (Objects.nonNull(gp.getPuppet().puppetStatistics.getRolls().get(totalRoll))) {
-        gp.getPuppet().puppetStatistics.getRolls().put(totalRoll, gp.getPuppet().puppetStatistics.getRolls().get(totalRoll) + 1);
+      if (Objects.nonNull(gp.getPuppet().puppetStatistics.rolls.get(totalRoll))) {
+        gp.getPuppet().puppetStatistics.rolls.put(totalRoll, gp.getPuppet().puppetStatistics.rolls.get(totalRoll) + 1);
       } else {
-        gp.getPuppet().puppetStatistics.getRolls().put(totalRoll, 1);
+        gp.getPuppet().puppetStatistics.rolls.put(totalRoll, 1);
       }
 
       gp.getPuppet().go(totalRoll);

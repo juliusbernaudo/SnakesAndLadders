@@ -5,8 +5,6 @@ import java.util.Set;
 
 public class PuppetStatistics extends Statistics {
 
-    HashMap<Integer, Integer> getRolls() { return rolls; }
-
     // Formatting the output into a singular string
     public String formatRollsOutput() {
         String output = new String();
